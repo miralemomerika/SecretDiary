@@ -3,7 +3,8 @@
     session_start();
     $diaryContent = "";
 
-    $link = mysqli_connect("localhost", "root", "", "realdiary");
+    //this is your connection string of course this is going to be different for you
+    $link = mysqli_connect("localhost", /*YOUR DB USER*/, /*DB PASSWORD*/, /*NAME OF DB*/);
     if (mysqli_connect_error()) {
         die("There was a problem while connecting to database.");
     }
@@ -13,6 +14,7 @@
     }
 
     if (array_key_exists("id", $_SESSION)) {
+        //loading users previous diary information
         $query = "SELECT `diary` FROM `users` WHERE id = ".mysqli_real_escape_string($link, $_SESSION['id'])." LIMIT 1";
 
         $results = mysqli_query($link, $query);
@@ -50,6 +52,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand navbar-nav mr-auto" href="logged.php">Secret Diary</a>
     <form class="form-inline my-2 my-lg-0">
+        //logout button
         <a href="index.php?logout=1">
       <button class="btn btn-outline-success my-2 my-sm-0" type="button">Logout</button>
       </a>
