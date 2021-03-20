@@ -13,7 +13,8 @@
         header("Location: logged.php");
     }
 
-    $link = mysqli_connect("localhost", "root", "", "realdiary");
+    //this is your connection string of course this is going to be different for you
+    $link = mysqli_connect("localhost", /*YOUR DB USER*/, /*DB PASSWORD*/, /*NAME OF DB*/);
     if (mysqli_connect_error()) {
         die("There was a problem while connecting to database.");
     }
@@ -34,6 +35,7 @@
             $error = "<div class='alert alert-danger' role='alert'>There were problems with your form: <br>".$error."</div>";
         } else {
             if ($_POST['signup'] == '1') {
+                //checkin if the user already exist
                 $query = "SELECT *
                       FROM `users`
                       WHERE email = '".mysqli_real_escape_string($link, $_POST['email'])."' 
@@ -41,8 +43,10 @@
                 $results = mysqli_query($link, $query);
 
                 if (mysqli_num_rows($results)) {
+                    //not so good message for security reasons, but for local use it's okay
                     $error = "<div class='alert alert-warning' role='alert'>That user already exists - try logging in.</div>";
                 } else {
+                    //adding new user, your table name should be users or you can change it if you want
                     $query = "INSERT INTO `users` (`email`, `password`)
                           VALUES ('".mysqli_real_escape_string($link, $_POST['email'])."', 
                           '".password_hash(mysqli_real_escape_string($link, $_POST['password']), PASSWORD_DEFAULT)."')";
@@ -58,6 +62,7 @@
                         header("Location: logged.php");
                     }
                 }
+                //login
             } elseif ($_POST['signup'] == '0') {
                 $query = "SELECT *
                       FROM `users`
@@ -74,7 +79,8 @@
                         $row["password"]
                     )) {
                         $_SESSION['id'] = $row['id'];
-
+                        
+                        //setting cookie
                         if ($_POST['stayLoggedIn'] == '1') {
                             setcookie("id", $row['id'], time() + 60*60*24*365);
                         }
