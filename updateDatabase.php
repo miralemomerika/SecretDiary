@@ -4,7 +4,8 @@ session_start();
 
 if(array_key_exists("content", $_POST)){
 
-    $link = mysqli_connect("localhost", "root", "", "realdiary");
+    //this is your connection string of course this is going to be different for you
+    $link = mysqli_connect("localhost", /*YOUR DB USER*/, /*DB PASSWORD*/, /*NAME OF DB*/);
     if (mysqli_connect_error()) {
         die("There was a problem while connecting to database.");
     }
